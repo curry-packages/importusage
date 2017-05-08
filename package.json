@@ -5,6 +5,10 @@
     "synopsis": "Library and tool to show the usage of imported entities of a module",
     "category": [ "Analysis" ],
     "dependencies": { },
+    "compilerCompatibility": {
+        "pakcs": ">= 1.14.0, < 2.0.0",
+        "kics2": ">= 0.5.0, < 2.0.0"
+    },
     "executable": {
         "name": "curry-usedimports",
         "main": "ImportUsage"
