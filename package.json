@@ -4,6 +4,9 @@
     "author": "Michael Hanus <mh@informatik.uni-kiel.de>",
     "synopsis": "Library and tool to show the usage of imported entities of a module",
     "category": [ "Analysis" ],
+    "dependencies": {
+        "flatcurry": ">= 1.0.0"
+    },
     "dependencies": { },
     "compilerCompatibility": {
         "pakcs": ">= 1.14.0",
