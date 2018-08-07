@@ -7,15 +7,16 @@
 
 module ImportUsage(main,showImportCalls) where
 
-import Char
-import Directory
+import Data.Char
+import Data.List
+import System.Directory
+import System.Environment (getArgs)
+import System.FilePath    ((</>), takeFileName)
 import Distribution
-import FilePath ((</>), takeFileName)
+import Sort
+
 import FlatCurry.Types
 import FlatCurry.Files
-import List
-import Sort
-import System
 
 
 -- Check arguments and call main function:
