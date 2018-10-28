@@ -5,7 +5,8 @@
     "synopsis": "Library and tool to show the usage of imported entities of a module",
     "category": [ "Analysis" ],
     "dependencies": {
-        "flatcurry": ">= 3.0.0"
+        "flatcurry": ">= 3.0.0",
+        "base"     : ">= 2.0.0"
     },
     "dependencies": { },
     "compilerCompatibility": {
