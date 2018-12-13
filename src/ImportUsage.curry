@@ -2,21 +2,21 @@
 --- Show the usage, i.e., all calls, of imported entities in a module
 ---
 --- @author Michael Hanus
---- @version April 2016
+--- @version December 2018
 -----------------------------------------------------------------------------
 
 module ImportUsage(main,showImportCalls) where
 
 import Char
-import Directory
-import Distribution
-import FilePath ((</>), takeFileName)
-import FlatCurry.Types
-import FlatCurry.Files
+import Directory ( doesFileExist, getModificationTime )
+import FilePath  ( (</>), takeFileName )
 import List
 import Sort
 import System
 
+import FlatCurry.Types
+import FlatCurry.Files
+import System.CurryPath ( lookupModuleSourceInLoadPath, stripCurrySuffix )
 
 -- Check arguments and call main function:
 main :: IO ()
