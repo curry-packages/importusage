@@ -2,17 +2,16 @@
 --- Show the usage, i.e., all calls, of imported entities in a module
 ---
 --- @author Michael Hanus
---- @version December 2018
+--- @version February 2020
 -----------------------------------------------------------------------------
 
-module ImportUsage(main,showImportCalls) where
+module ImportUsage ( main, showImportCalls )
+ where
 
-import Char
-import Directory ( doesFileExist, getModificationTime )
-import FilePath  ( (</>), takeFileName )
-import List
-import Sort
-import System
+import Data.List          ( intersperse, nub, sortBy, union )
+import System.Directory   ( doesFileExist, getModificationTime )
+import System.FilePath    ( (</>), takeFileName )
+import System.Environment ( getArgs )
 
 import FlatCurry.Types
 import FlatCurry.Files
@@ -50,8 +49,8 @@ formatImpCalls impcalls =
 getAllImpCalls :: Prog -> [(String,[String])]
 getAllImpCalls (Prog mod imps _ funs _) =
   calls2impCalls imps
-                (mergeSortBy (\ (_,n1) (_,n2) -> n1 <= n2)
-                             (allFunCalls mod funs))
+                  (sortBy (\ (_,n1) (_,n2) -> n1 <= n2)
+                          (allFunCalls mod funs))
 
 calls2impCalls :: [String] -> [QName] -> [(String,[String])]
 calls2impCalls [] _ = []

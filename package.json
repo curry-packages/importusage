@@ -1,18 +1,21 @@
 {
     "name": "importusage",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "author": "Michael Hanus <mh@informatik.uni-kiel.de>",
     "synopsis": "Library and tool to show the usage of imported entities of a module",
     "category": [ "Analysis" ],
+    "license": "BSD-3-Clause",
+    "licenseFile": "LICENSE",
     "dependencies": {
-        "base"      : ">= 1.0.0, < 2.0.0",
-        "currypath" : ">= 0.0.1",
-        "flatcurry" : ">= 2.0.0"
+        "base"      : ">= 3.0.0, < 4.0.0",
+        "currypath" : ">= 3.0.0, < 4.0.0",
+        "directory" : ">= 3.0.0, < 4.0.0",
+        "filepath"  : ">= 3.0.0, < 4.0.0",
+        "flatcurry" : ">= 3.0.0, < 4.0.0"
     },
-    "dependencies": { },
     "compilerCompatibility": {
-        "pakcs": ">= 2.0.0",
-        "kics2": ">= 2.0.0"
+        "pakcs": ">= 3.0.0, < 4.0.0",
+        "kics2": ">= 3.0.0, < 4.0.0"
     },
     "executable": {
         "name": "curry-usedimports",
