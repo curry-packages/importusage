@@ -97,7 +97,7 @@ readCurrentFlatCurry modname = do
                                        mbdirfn)
   fcyexists <- doesFileExist fcyprogname
   if not fcyexists
-    then readFlatCurry progname
+    then readFlatCurry modname
     else do ctime <- getModificationTime progname
             ftime <- getModificationTime fcyprogname
             if ctime>ftime
