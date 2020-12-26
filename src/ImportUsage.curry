@@ -2,30 +2,29 @@
 --- Show the usage, i.e., all calls, of imported entities in a module
 ---
 --- @author Michael Hanus
---- @version February 2020
+--- @version December 2020
 -----------------------------------------------------------------------------
 
 module ImportUsage ( main, showImportCalls )
  where
 
-import Data.List          ( intersperse, nub, sortBy, union )
+import Data.List          ( intercalate, nub, sortBy, union )
 import System.Directory   ( doesFileExist, getModificationTime )
 import System.FilePath    ( (</>), takeFileName )
 import System.Environment ( getArgs )
 
 import FlatCurry.Types
 import FlatCurry.Files
-import System.CurryPath ( lookupModuleSourceInLoadPath, stripCurrySuffix )
+import System.CurryPath ( lookupModuleSourceInLoadPath, runModuleAction )
 
 -- Check arguments and call main function:
 main :: IO ()
 main = do
   args <- getArgs
   if length args /= 1
-   then putStrLn $ "ERROR: Illegal arguments: " ++
-                   concat (intersperse " " args) ++ "\n" ++
-                   "Usage: curry-usedimports <module_name>"
-   else showAllImportedCalls (stripCurrySuffix (head args))
+    then putStrLn $ "ERROR: Illegal arguments: " ++ unwords args ++ "\n" ++
+                    "Usage: curry-usedimports <module_name>"
+    else runModuleAction showAllImportedCalls (head args)
 
 showAllImportedCalls :: String -> IO ()
 showAllImportedCalls modname = do
@@ -40,8 +39,8 @@ showImportCalls = formatImpCalls . getAllImpCalls
 -- format import calls as import declarations:
 formatImpCalls :: [(String,[String])] -> String
 formatImpCalls impcalls =
-  concatMap (\(mod,imps)->"import "++mod++"("++
-                          concat (intersperse "," (map showName imps))++")\n")
+  concatMap (\(mod,imps) -> "import " ++ mod ++ "(" ++
+                            intercalate "," (map showName imps) ++ ")\n")
             impcalls
  where
    showName name = if isAlpha (head name) then name else '(':name++")"
@@ -55,7 +54,7 @@ getAllImpCalls (Prog mod imps _ funs _) =
 calls2impCalls :: [String] -> [QName] -> [(String,[String])]
 calls2impCalls [] _ = []
 calls2impCalls (mod:mods) funs =
- (mod, map snd (filter (\(m,_)->m==mod) funs)) : calls2impCalls mods funs
+ (mod, map snd (filter (\ (m,_) -> m==mod) funs)) : calls2impCalls mods funs
 
 -- Computes the list of called functions in a list of function declarations
 allFunCalls :: String -> [FuncDecl] -> [QName]
@@ -73,8 +72,8 @@ globalFunsInExpr mod exp = funsInExpr exp
   funsInExpr (Lit _) = []
   funsInExpr (Comb _ (m,f) es) =
     if m==mod || (m=="Prelude" && f `elem` ["commit","apply","cond"])
-    then nub (concatMap funsInExpr es)
-    else nub ((m,f) : concatMap funsInExpr es)
+      then nub (concatMap funsInExpr es)
+      else nub ((m,f) : concatMap funsInExpr es)
   funsInExpr (Free _ e) = funsInExpr e
   funsInExpr (Let bs e) = union (nub (concatMap (funsInExpr . snd) bs)) (funsInExpr e)
   funsInExpr (Or e1 e2) = union (funsInExpr e1) (funsInExpr e2)
@@ -92,15 +91,15 @@ readCurrentFlatCurry modname = do
   mbdirfn <- lookupModuleSourceInLoadPath modname
   let progname = maybe modname snd mbdirfn
   let fcyprogname = flatCurryFileName
-                        (maybe modname (\ (d,_) -> d </> takeFileName modname)
-                                       mbdirfn)
+                      (maybe modname (\ (d,_) -> d </> takeFileName modname)
+                                     mbdirfn)
   fcyexists <- doesFileExist fcyprogname
   if not fcyexists
     then readFlatCurry progname
     else do ctime <- getModificationTime progname
             ftime <- getModificationTime fcyprogname
-            if ctime>ftime
-             then readFlatCurry modname
-             else readFlatCurryFile fcyprogname
+            if ctime > ftime
+              then readFlatCurry modname
+              else readFlatCurryFile fcyprogname
 
 -----------------------------------------------------------------------------
