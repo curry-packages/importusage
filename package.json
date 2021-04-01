@@ -13,10 +13,6 @@
         "filepath"  : ">= 3.0.0, < 4.0.0",
         "flatcurry" : ">= 3.0.0, < 4.0.0"
     },
-    "compilerCompatibility": {
-        "pakcs": ">= 3.0.0, < 4.0.0",
-        "kics2": ">= 3.0.0, < 4.0.0"
-    },
     "executable": {
         "name": "curry-usedimports",
         "main": "ImportUsage"
