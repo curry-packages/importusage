@@ -2,7 +2,7 @@
 --- Show the usage, i.e., all calls, of imported entities in a module
 ---
 --- @author Michael Hanus
---- @version April 2021
+--- @version November 2023
 -----------------------------------------------------------------------------
 
 module ImportUsage ( main, showImportCalls )
@@ -21,10 +21,10 @@ import System.CurryPath ( lookupModuleSourceInLoadPath, runModuleAction )
 main :: IO ()
 main = do
   args <- getArgs
-  if length args /= 1
-    then putStrLn $ "ERROR: Illegal arguments: " ++ unwords args ++ "\n" ++
-                    "Usage: curry-usedimports <module_name>"
-    else runModuleAction showAllImportedCalls (head args)
+  case args of
+    [prog] -> runModuleAction showAllImportedCalls prog
+    _      -> putStrLn $ "ERROR: Illegal arguments: " ++ unwords args ++ "\n" ++
+                         "Usage: curry-usedimports <module_name>"
 
 showAllImportedCalls :: String -> IO ()
 showAllImportedCalls modname = do
@@ -125,17 +125,15 @@ isSpecialName s = "_" `isPrefixOf` s || '#' `elem` s
 
 ----------------- Auxiliaries:
 
--- Read a FlatCurry program (parse only if necessary):
+-- Reads a FlatCurry program (parse only if necessary).
 readCurrentFlatCurry :: String -> IO Prog
 readCurrentFlatCurry modname = do
   mbdirfn <- lookupModuleSourceInLoadPath modname
   let progname    = maybe modname snd mbdirfn
-      fcyprogname = flatCurryFileName
-                      (maybe modname (\ (d,_) -> d </> takeFileName modname)
-                                     mbdirfn)
+      fcyprogname = maybe "" (\(d,_) -> d </> flatCurryFileName modname) mbdirfn
   fcyexists <- doesFileExist fcyprogname
   if not fcyexists
-    then readFlatCurry progname
+    then readFlatCurry modname
     else do ctime <- getModificationTime progname
             ftime <- getModificationTime fcyprogname
             if ctime > ftime
