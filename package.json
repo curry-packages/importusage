@@ -18,7 +18,7 @@
         "main": "ImportUsage"
     },
     "source": {
-        "git": "https://git.ps.informatik.uni-kiel.de/curry-packages/importusage.git",
+        "git": "https://github.com/curry-packages/importusage.git",
         "tag": "$version"
     }
 }
