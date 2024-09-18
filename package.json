@@ -11,7 +11,7 @@
         "currypath" : ">= 3.0.0, < 4.0.0",
         "directory" : ">= 3.0.0, < 4.0.0",
         "filepath"  : ">= 3.0.0, < 4.0.0",
-        "flatcurry" : ">= 3.0.0, < 4.0.0"
+        "flatcurry" : ">= 3.0.0, < 5.0.0"
     },
     "executable": {
         "name": "curry-usedimports",
