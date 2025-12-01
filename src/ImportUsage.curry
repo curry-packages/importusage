@@ -2,7 +2,7 @@
 --- Show the usage, i.e., all calls, of imported entities in a module
 ---
 --- @author Michael Hanus
---- @version November 2023
+--- @version November 2025
 -----------------------------------------------------------------------------
 
 module ImportUsage ( main, showImportCalls )
@@ -80,14 +80,13 @@ globalFunsInExpr mod exp = funsInExpr exp
       then nub (concatMap funsInExpr es)
       else nub ((m,f) : concatMap funsInExpr es)
   funsInExpr (Free _ e) = funsInExpr e
-  funsInExpr (Let bs e) = union (nub (concatMap (funsInExpr . snd) bs))
+  funsInExpr (Let bs e) = union (nub (concatMap funsInExpr (expsOfLetBind bs)))
                                 (funsInExpr e)
   funsInExpr (Or e1 e2) = union (funsInExpr e1) (funsInExpr e2)
   funsInExpr (Case _ e bs) = union (funsInExpr e)
                                    (nub (concatMap funsInBranch bs))
                        where funsInBranch (Branch _ be) = funsInExpr be
   funsInExpr (Typed e _) = funsInExpr e
-
 
 -- Computes the set of type names used in a type declaration
 -- that are not defined in the module given as the first argument.
